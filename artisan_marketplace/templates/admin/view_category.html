@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+  <table width="333" border="1" align="center">
+    <tr align="center">
+      <td width="57">#</td>
+      <td width="130">Category</td>
+      <td width="124">Edit/Delete</td>
+    </tr>
+      {% for i in data %}
+    <tr align="center">
+      <td>{{ forloop.counter }}</td>
+      <td>&nbsp;{{ i.category }}</td>
+      <td><a href="/edit_category">Edit</a><br />
+      <a href="/deletecategory/{{ i.id }}">Delete</a></td>
+    </tr>
+      {% endfor %}
+  </table>
+</body>
+</html>

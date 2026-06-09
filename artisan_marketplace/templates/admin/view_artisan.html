@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+<table width="778" border="1">
+  <tr align="center">
+    <td>#</td>
+    <td>Name</td>
+    <td>Phone</td>
+    <td>E-mail</td>
+    <td>Place</td>
+    <td>Gender</td>
+    <td>Block/Unblock</td>
+  </tr>
+    {% for i in data %}
+  <tr align="center">
+    <td>{{ forloop.counter }}&nbsp;</td>
+    <td>&nbsp;{{ i.name }}</td>
+    <td>&nbsp;{{ i.phone }}</td>
+    <td>{{ i.email }}&nbsp;</td>
+    <td>&nbsp;{{ i.place }}</td>
+    <td>{{ i.gender }}&nbsp;</td>
+    <td><a href="#">Block</a><br />
+    <a href="#">Unblock</a></td>
+  </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
