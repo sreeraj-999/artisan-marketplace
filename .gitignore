@@ -1,0 +1,15 @@
+# Python cache
+__pycache__/
+*.pyc
+*$py.class
+
+# Environment
+venv/
+.env
+
+# IDE / Editor settings
+.idea/
+.vscode/
+
+# Local databases (optional, but db.sqlite3 is currently tracked, so it won't be ignored by this if already tracked)
+# db.sqlite3

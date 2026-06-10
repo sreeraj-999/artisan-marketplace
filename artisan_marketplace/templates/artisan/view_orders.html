@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Orders - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div>
+    <h1 class="page-title">Customer Orders</h1>
+    <p class="page-subtitle">Track orders, review customer requests, and ship products.</p>
+    
+    <div class="content-card">
+        {% if data %}
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 60px; text-align: center;">#</th>
+                            <th>Customer info</th>
+                            <th>Product Details</th>
+                            <th>Amount</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                            <th style="width: 200px; text-align: center;">Update Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in data %}
+                            <tr>
+                                <td style="text-align: center; font-weight: 600; color: var(--text-muted);">{{ forloop.counter }}</td>
+                                <td>
+                                    <div style="font-weight: 600;">{{ i.CUSTOMER.name }}</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">📞 {{ i.CUSTOMER.phone }}</div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600; color: #c084fc;">🏺 {{ i.PRODUCT.productname }}</div>
+                                </td>
+                                <td style="font-weight: 700;">${{ i.price }}</td>
+                                <td style="font-size: 0.9rem; color: var(--text-muted);">{{ i.date }}</td>
+                                <td>
+                                    {% if i.status|lower == 'pending' %}
+                                        <span class="badge badge-warning">Pending</span>
+                                    {% elif i.status|lower == 'shipped' %}
+                                        <span class="badge badge-info">Shipped</span>
+                                    {% elif i.status|lower == 'delivered' or i.status|lower == 'completed' %}
+                                        <span class="badge badge-success">Delivered</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">{{ i.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: center;">
+                                    <form method="post" action="/artisan_updateorderstatus/{{ i.id }}" style="display: inline-flex; gap: 0.5rem; align-items: center; justify-content: center; width: 100%;">
+                                        {% csrf_token %}
+                                        <select name="status" class="form-control form-control-sm" style="min-width: 120px; font-size: 0.85rem; padding: 0.35rem 1.75rem 0.35rem 0.75rem; height: auto;" onchange="this.form.submit()">
+                                            <option value="pending" {% if i.status|lower == 'pending' %}selected{% endif %}>Pending</option>
+                                            <option value="shipped" {% if i.status|lower == 'shipped' %}selected{% endif %}>Shipped</option>
+                                            <option value="delivered" {% if i.status|lower == 'delivered' %}selected{% endif %}>Delivered</option>
+                                            <option value="cancelled" {% if i.status|lower == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                                        </select>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 3rem 1.5rem; color: var(--text-muted);">
+                <h3>No orders placed yet</h3>
+                <p style="margin-top: 0.5rem;">When customers purchase your products, they will appear here.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,36 +1,44 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-</head>
+{% extends 'base.html' %}
 
-<body><table width="200" border="1" align="center">
-  <tr align="center">
-    <td><a href="/changepass">Change password</a></td>
-  </tr>
-  <tr align="center">
-    <td><a href="/addcategory">Add category</a></td>
-  </tr>
-  <tr align="center">
-    <td><a href="/viewcategory">View category</a></td>
-  </tr>
-  <tr align="center">
-    <td><a href="/viewartisan">View artisans</a></td>
-  </tr>
-  <tr align="center">
-    <td><a href="/viewcomplaint">View Complaints</a></td>
-  </tr>
-  <tr align="center">
-    <td><a href="/viewcustomer">View customers</a></td>
-  </tr>
-  <tr align="center">
-    <td><a href="/viewfeedback">View feedback</a></td>
-  </tr>
-  <tr align="center">
-    <td><a href="/logout">Logout</a></td>
-  </tr>
-</table>
+{% block title %}Admin Dashboard - Artisan Marketplace{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<div>
+    <h1 class="page-title">Admin Dashboard</h1>
+    <p class="page-subtitle">Manage artisans, customers, categories, and system-wide complaints.</p>
+    
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-title">👥 Total Customers</span>
+            <span class="stat-value">{{ customer_count }}</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-title">👷 Total Artisans</span>
+            <span class="stat-value">{{ artisan_count }}</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-title">🏷️ Product Categories</span>
+            <span class="stat-value">{{ category_count }}</span>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid #f59e0b;">
+            <span class="stat-title">⚠️ Pending Complaints</span>
+            <span class="stat-value">{{ complaint_count }}</span>
+        </div>
+    </div>
+    
+    <!-- Quick Actions Panel -->
+    <div class="content-card" style="margin-top: 2rem;">
+        <h2 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; font-size: 1.4rem;">🔧 Quick Actions</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <a href="/addcategory" class="btn btn-primary">➕ Add Category</a>
+            <a href="/viewcategory" class="btn btn-secondary">🏷️ View Categories</a>
+            <a href="/viewartisan" class="btn btn-secondary">👷 View Artisans</a>
+            <a href="/viewcomplaint" class="btn btn-secondary">⚠️ View Complaints</a>
+            <a href="/viewcustomer" class="btn btn-secondary">👥 View Customers</a>
+            <a href="/viewfeedback" class="btn btn-secondary">💬 View Feedbacks</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

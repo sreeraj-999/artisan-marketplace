@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Products - Artisan Marketplace{% endblock %}
+
+{% block extra_head %}
+<style>
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 1.5rem;
+    }
+    
+    .product-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: var(--shadow);
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(124, 58, 237, 0.3);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+    
+    .product-img-wrapper {
+        position: relative;
+        height: 200px;
+        background: rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+    }
+    
+    .product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .product-card:hover .product-img {
+        transform: scale(1.05);
+    }
+    
+    .product-info {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex-grow: 1;
+    }
+    
+    .product-name {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #fff;
+    }
+    
+    .product-price-qty {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.5rem;
+    }
+    
+    .product-price {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #c084fc;
+    }
+    
+    .product-qty {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        background: rgba(255,255,255,0.05);
+        padding: 0.25rem 0.6rem;
+        border-radius: 8px;
+    }
+    
+    .product-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+        border-top: 1px solid var(--border-color);
+        background: rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div>
+            <h1 class="page-title">Product Catalog</h1>
+            <p class="page-subtitle">Manage listings, adjust prices, and track inventory stock.</p>
+        </div>
+        <a href="/artisan_addproduct" class="btn btn-primary btn-sm">➕ Add New Product</a>
+    </div>
+    
+    {% if data %}
+        <div class="product-grid">
+            {% for i in data %}
+                <div class="product-card">
+                    <div class="product-img-wrapper">
+                        {% if i.image and i.image != 'no_image.png' %}
+                            <img src="/media/{{ i.image }}" alt="{{ i.productname }}" class="product-img" />
+                        {% else %}
+                            <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: var(--text-muted); font-size: 3rem;">🏺</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="product-info">
+                        <h3 class="product-name">{{ i.productname }}</h3>
+                        <div class="product-price-qty">
+                            <span class="product-price">${{ i.price }}</span>
+                            <span class="product-qty">Qty: {{ i.quantity }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <a href="/artisan_editproduct/{{ i.id }}" class="btn btn-secondary btn-sm">✏️ Edit</a>
+                        <a href="/artisan_deleteproduct/{{ i.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product?')">🗑️ Delete</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="content-card" style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
+            <h2>No products in your catalog</h2>
+            <p style="margin-top: 0.5rem; margin-bottom: 2rem;">Start adding your products to showcase them to customers.</p>
+            <a href="/artisan_addproduct" class="btn btn-primary">Add Your First Product</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

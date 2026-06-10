@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto; width: 100%;">
+    <h1 class="page-title">My Profile</h1>
+    <p class="page-subtitle">View and update your shop profile information.</p>
+    
+    <div class="content-card">
+        <form id="form1" name="form1" method="post" action="/artisan_profile_post">
+            {% csrf_token %}
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" name="name" id="name" class="form-control" value="{{ artisan.name }}" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" name="phone" id="phone" class="form-control" value="{{ artisan.phone }}" required />
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" name="email" id="email" class="form-control" value="{{ artisan.email }}" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="place">Place / Location</label>
+                    <input type="text" name="place" id="place" class="form-control" value="{{ artisan.place }}" required />
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label for="gender">Gender</label>
+                <select name="gender" id="gender" class="form-control" required>
+                    <option value="Male" {% if artisan.gender == 'Male' %}selected{% endif %}>Male</option>
+                    <option value="Female" {% if artisan.gender == 'Female' %}selected{% endif %}>Female</option>
+                    <option value="Other" {% if artisan.gender == 'Other' %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <a href="/artisan_home" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    💾 Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

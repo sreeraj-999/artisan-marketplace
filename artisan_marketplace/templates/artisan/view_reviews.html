@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Product Reviews - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div>
+    <h1 class="page-title">Reviews & Feedback</h1>
+    <p class="page-subtitle">Read customer comments and feedback left on your products.</p>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem;">
+        
+        <!-- Reviews Section -->
+        <div>
+            <h2 style="font-size: 1.3rem; margin-bottom: 1rem; color: #c084fc; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">⭐ Product Reviews</h2>
+            
+            {% if reviews %}
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    {% for r in reviews %}
+                        <div class="content-card" style="margin-top: 0; padding: 1.5rem; background: rgba(255, 255, 255, 0.02);">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                <div>
+                                    <span style="font-weight: 600; color: #fff;">{{ r.CUSTOMER.name }}</span>
+                                    <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 0.5rem;">on {{ r.PRODUCT.productname }}</span>
+                                </div>
+                                <span style="font-size: 0.8rem; color: var(--text-muted);">🗓️ {{ r.reviewdate }}</span>
+                            </div>
+                            <p style="font-style: italic; color: var(--text-color); line-height: 1.4;">"{{ r.review }}"</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="content-card" style="margin-top: 0; text-align: center; padding: 2rem; color: var(--text-muted);">
+                    <p>No product reviews submitted yet.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Feedback Section -->
+        <div>
+            <h2 style="font-size: 1.3rem; margin-bottom: 1rem; color: #c084fc; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">💬 Product Feedback</h2>
+            
+            {% if feedbacks %}
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    {% for f in feedbacks %}
+                        <div class="content-card" style="margin-top: 0; padding: 1.5rem; background: rgba(255, 255, 255, 0.02);">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                <div>
+                                    <span style="font-weight: 600; color: #fff;">{{ f.CUSTOMER.name }}</span>
+                                    <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 0.5rem;">on {{ f.PRODUCT.productname }}</span>
+                                </div>
+                                <span style="font-size: 0.8rem; color: var(--text-muted);">🗓️ {{ f.feedbackdate }}</span>
+                            </div>
+                            <p style="font-style: italic; color: var(--text-color); line-height: 1.4;">"{{ f.feedback }}"</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="content-card" style="margin-top: 0; text-align: center; padding: 2rem; color: var(--text-muted);">
+                    <p>No product feedback submitted yet.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

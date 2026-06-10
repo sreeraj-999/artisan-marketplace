@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Product - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; width: 100%;">
+    <h1 class="page-title">Edit Product</h1>
+    <p class="page-subtitle">Update product details or replace the product photo.</p>
+    
+    <div class="content-card">
+        <form id="form1" name="form1" method="post" action="/artisan_editproduct_post/{{ id }}" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="name">Product Name</label>
+                <input type="text" name="name" id="name" class="form-control" value="{{ data.productname }}" required />
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label for="price">Price ($)</label>
+                    <input type="number" step="0.01" name="price" id="price" class="form-control" value="{{ data.price }}" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="quantity">Quantity In Stock</label>
+                    <input type="number" name="quantity" id="quantity" class="form-control" value="{{ data.quantity }}" required />
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label>Current Image</label>
+                <div style="margin-bottom: 1rem; width: 120px; height: 120px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); background: rgba(0,0,0,0.2);">
+                    {% if data.image and data.image != 'no_image.png' %}
+                        <img src="/media/{{ data.image }}" alt="{{ data.productname }}" style="width: 100%; height: 100%; object-fit: cover;" />
+                    {% else %}
+                        <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: var(--text-muted); font-size: 2rem;">🏺</div>
+                    {% endif %}
+                </div>
+                <label for="image">Replace Product Image (Leave empty to keep current image)</label>
+                <input type="file" name="image" id="image" class="form-control" accept="image/*" style="padding: 0.6rem 1rem;" />
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <a href="/artisan_viewproducts" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    💾 Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

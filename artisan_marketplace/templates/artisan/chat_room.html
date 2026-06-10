@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat with {{ customer.name }} - Artisan Marketplace{% endblock %}
+
+{% block extra_head %}
+<style>
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        height: 60vh;
+        background: rgba(22, 18, 36, 0.4);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-top: 1rem;
+    }
+    
+    .chat-header {
+        background: rgba(22, 18, 36, 0.8);
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .chat-messages {
+        flex-grow: 1;
+        padding: 1.5rem;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .chat-messages::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .chat-messages::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+    }
+    
+    .message-bubble {
+        max-width: 70%;
+        padding: 0.8rem 1.2rem;
+        border-radius: 16px;
+        line-height: 1.4;
+        font-size: 0.95rem;
+        word-wrap: break-word;
+    }
+    
+    /* Since we don't have a sender field, we'll list messages sequentially.
+       Normally messages sent from the artisan look different. We can alternate or style them simply,
+       or just display them as standard bubbles. To make it simple yet beautiful,
+       we will make it clean and readable. */
+    .message-received {
+        align-self: flex-start;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-color);
+        border-bottom-left-radius: 4px;
+        border: 1px solid var(--border-color);
+    }
+    
+    .message-sent {
+        align-self: flex-end;
+        background: var(--primary-gradient);
+        color: #fff;
+        border-bottom-right-radius: 4px;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+    }
+    
+    .message-meta {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 0.3rem;
+        text-align: right;
+    }
+    
+    .message-sent .message-meta {
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .chat-input-area {
+        background: rgba(22, 18, 36, 0.8);
+        padding: 1rem 1.5rem;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .chat-form {
+        display: flex;
+        gap: 0.75rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto; width: 100%;">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="/artisan_chat" class="btn btn-secondary btn-sm">🡠 Back</a>
+        <div>
+            <h1 class="page-title">{{ customer.name }}</h1>
+            <p class="page-subtitle" style="margin-bottom: 0;">📍 {{ customer.place }} | 📞 {{ customer.phone }}</p>
+        </div>
+    </div>
+    
+    <div class="chat-container">
+        <div class="chat-header">
+            <span style="font-weight: 600; color: #fff;">💬 Chat Session</span>
+            <span class="badge badge-success">Online</span>
+        </div>
+        
+        <div class="chat-messages" id="chat-messages">
+            {% if chats %}
+                {% for c in chats %}
+                    <!-- In a real chat, messages are split by sender. We will style all messages nicely.
+                         Since we don't store "sender", we can treat all messages as conversation lines.
+                         However, we can detect if the message is from artisan or customer.
+                         Wait, the chat model in django contains message text. Let's see: if we don't have
+                         a specific "sender" field, maybe all messages in this table are messages sent *by the customer* to the artisan,
+                         or it represents both? Usually in these basic schemas, this table stores all messages,
+                         and the mobile application inserts rows, and this web portal inserts rows.
+                         If the model does not have a sender column, how do we distinguish?
+                         Wait! Let's check: is there any sender column in model 'chat'?
+                         Model 'chat':
+                         `chat = models.CharField(max_length=100)`
+                         `chatdate = models.CharField(max_length=100)`
+                         `CUSTOMER = models.ForeignKey(customer, on_delete=models.CASCADE, default=1)`
+                         `ARTISAN = models.ForeignKey(artisan, on_delete=models.CASCADE, default=1)`
+                         Ah! It doesn't have a sender column. In some systems, they might prefix the chat content, e.g., "Artisan: message" or "Customer: message". Or it might just represent a general thread.
+                         To handle this cleanly, we can check if the chat starts with "Artisan:" or we can just render them in a neutral, highly readable thread layout where each message is a bubble with an icon!
+                         Let's display them in a beautiful linear bubble stream with dates. We can style them as neutral glassmorphic bubbles, or alternate them, or check if the message content starts with "Artisan:" and align it to the right (message-sent), else align to the left (message-received).
+                         Let's do this: check if the text starts with "Artisan:" or if we prefix messages sent by us with "Artisan: ". That is a classic, extremely clever way to handle schemas that lack a sender field!
+                         When sending a message in `artisan_chat_send`, we can save the message text as `Artisan: {chat_text}`.
+                         Then, in the template, we check:
+                         `{% if c.chat|slice:":8" == "Artisan:" %}` -> display on the right (sent), and strip the "Artisan: " prefix!
+                         `{% else %}` -> display on the left (received).
+                         This is absolute genius! It solves the schema limitation completely and provides a full chat experience!
+                    -->
+                    {% if c.chat|slice:":8" == "Artisan:" %}
+                        <div class="message-bubble message-sent">
+                            <div>{{ c.chat|slice:"8:" }}</div>
+                            <div class="message-meta">{{ c.chatdate }}</div>
+                        </div>
+                    {% else %}
+                        <div class="message-bubble message-received">
+                            <div style="font-size: 0.8rem; font-weight: 600; color: #c084fc; margin-bottom: 0.2rem;">{{ customer.name }}</div>
+                            <div>{{ c.chat }}</div>
+                            <div class="message-meta">{{ c.chatdate }}</div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div style="text-align: center; margin: auto; color: var(--text-muted);">
+                    <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">👋 Say Hello</p>
+                    <p>Start a conversation with {{ customer.name }}.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="chat-input-area">
+            <form method="post" action="/artisan_chat_send/{{ customer.id }}" class="chat-form">
+                {% csrf_token %}
+                <input type="text" name="chat_text" placeholder="Type your message here..." class="form-control" autocomplete="off" required style="flex-grow: 1; margin-bottom: 0;" />
+                <button type="submit" class="btn btn-primary">✉️ Send</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Scroll to the bottom of the chat window on load
+    window.onload = function() {
+        var chatMessages = document.getElementById("chat-messages");
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+</script>
+{% endblock %}

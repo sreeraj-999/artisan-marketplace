@@ -1,30 +1,66 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-</head>
+{% extends 'base.html' %}
 
-<body>
-<table width="649" border="1">
-  <tr align="center" >
-    <td width="111">#</td>
-    <td width="111">Name</td>
-    <td width="111">Complaint</td>
-    <td width="111">Complaint date</td>
-    <td width="111">Reply</td>
-    <td width="144">Reply date</td>
-  </tr>
-    {% for i in data %}
-  <tr align="center">
-    <td>&nbsp;{{ forloop.counter }}</td>
-    <td>&nbsp;{{ i.CUSTOMER.name }}</td>
-    <td>&nbsp;{{ i.complaint }}</td>
-    <td> {{ i.complaintdate }}</td>
-    <td><a href="/replycomplaint">Send reply</a></td>
-    <td> {{ i.replydate }}</td>
-  </tr>
-    {% endfor %}
-</table>
-</body>
-</html>
+{% block title %}View Complaints - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div>
+    <h1 class="page-title">Complaints</h1>
+    <p class="page-subtitle">Track and reply to complaints submitted by customers.</p>
+    
+    <div class="content-card">
+        {% if data %}
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 60px; text-align: center;">#</th>
+                            <th>Customer</th>
+                            <th>Complaint Details</th>
+                            <th style="width: 130px;">Date Submitted</th>
+                            <th>Reply Status</th>
+                            <th style="width: 150px; text-align: center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in data %}
+                            <tr>
+                                <td style="text-align: center; font-weight: 600; color: var(--text-muted);">{{ forloop.counter }}</td>
+                                <td style="font-weight: 600;">{{ i.CUSTOMER.name }}</td>
+                                <td>
+                                    <div style="font-weight: 500; font-size: 0.95rem;">{{ i.complaint }}</div>
+                                    {% if i.reply != 'pending' and i.reply != '' %}
+                                        <div style="margin-top: 0.6rem; padding: 0.6rem; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border-left: 3px solid #7c3aed; font-size: 0.88rem;">
+                                            <span style="color: #c084fc; font-weight: 600;">Reply:</span> {{ i.reply }}
+                                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Date: {{ i.replydate }}</div>
+                                        </div>
+                                    {% endif %}
+                                </td>
+                                <td style="font-size: 0.9rem; color: var(--text-muted);">{{ i.complaintdate }}</td>
+                                <td>
+                                    {% if i.reply == 'pending' or i.reply == '' %}
+                                        <span class="badge badge-warning">Pending</span>
+                                    {% else %}
+                                        <span class="badge badge-success">Resolved</span>
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: center;">
+                                    {% if i.reply == 'pending' or i.reply == '' %}
+                                        <a href="/replycomplaint/{{ i.id }}" class="btn btn-primary btn-sm">💬 Send Reply</a>
+                                    {% else %}
+                                        <span style="font-size: 0.9rem; color: var(--text-muted);">No Action</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 3rem 1.5rem; color: var(--text-muted);">
+                <h3>No complaints registered</h3>
+                <p style="margin-top: 0.5rem;">There are currently no customer complaints in the database.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

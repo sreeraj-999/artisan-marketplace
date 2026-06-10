@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Artisan Dashboard - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div>
+    <h1 class="page-title">Welcome back, {{ artisan.name }}!</h1>
+    <p class="page-subtitle">Here is an overview of your shop statistics and quick actions.</p>
+    
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-title">📦 Active Products</span>
+            <span class="stat-value">{{ prod_count }}</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-title">🛍️ Total Orders</span>
+            <span class="stat-value">{{ order_count }}</span>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid #10b981;">
+            <span class="stat-title">💰 Total Earnings</span>
+            <span class="stat-value">${{ earnings }}</span>
+        </div>
+    </div>
+    
+    <!-- Quick Actions Panel -->
+    <div class="content-card" style="margin-top: 2rem;">
+        <h2 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; font-size: 1.4rem;">📦 Shop Management</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <a href="/artisan_addproduct" class="btn btn-primary">➕ Add Product</a>
+            <a href="/artisan_viewproducts" class="btn btn-secondary">🔍 Manage Catalog</a>
+            <a href="/artisan_vieworders" class="btn btn-secondary">🛍️ View Orders</a>
+            <a href="/artisan_viewpayments" class="btn btn-secondary">💵 Sales Payments</a>
+            <a href="/artisan_viewreviews" class="btn btn-secondary">⭐ Product Reviews</a>
+            <a href="/artisan_chat" class="btn btn-secondary">💬 Customer Chat</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

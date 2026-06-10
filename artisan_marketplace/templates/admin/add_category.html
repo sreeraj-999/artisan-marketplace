@@ -1,23 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-</head>
+{% extends 'base.html' %}
 
-<body>
-<form id="form1" name="form1" method="post" action="/addcategory_post">
-  <table width="303" border="1" align="center">
-    <tr>
-      <td width="123" align="center">Category</td>
-      <td width="164"><label>
-        <input type="text" name="textfield" id="textfield" />
-      </label></td>
-    </tr>
-    <tr>
-      <td colspan="2" align="center"><input type="submit" name="button" id="button" value="Add" /></td>
-    </tr>
-  </table>
-</form>
-</body>
-</html>
+{% block title %}Add Category - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; width: 100%;">
+    <h1 class="page-title">Add Category</h1>
+    <p class="page-subtitle">Define a new category for products in the marketplace.</p>
+    
+    <div class="content-card">
+        <form id="form1" name="form1" method="post" action="/addcategory_post">
+            {% csrf_token %}
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label for="textfield">Category Name</label>
+                <input type="text" name="textfield" id="textfield" class="form-control" placeholder="e.g. Handmade Pottery, Wooden Sculptures" required />
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <a href="/viewcategory" class="btn btn-secondary">Cancel</a>
+                <button type="submit" name="button" id="button" class="btn btn-primary">
+                    ➕ Add Category
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

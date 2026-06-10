@@ -1,23 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-</head>
+{% extends 'base.html' %}
 
-<body>
-<form id="form1" name="form1" method="post" action="">
-  <table width="416" border="1" align="center">
-    <tr>
-      <td width="59">Reply</td>
-      <td width="341"><label>
-        <textarea name="textarea" id="textarea" cols="45" rows="5"></textarea>
-      </label></td>
-    </tr>
-    <tr>
-      <td colspan="2" align="center"><input type="submit" name="button" id="button" value="Send" /></td>
-    </tr>
-  </table>
-</form>
-</body>
-</html>
+{% block title %}Reply to Complaint - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; width: 100%;">
+    <h1 class="page-title">Reply to Complaint</h1>
+    <p class="page-subtitle">Draft a resolution and send it back to the customer.</p>
+    
+    <div class="content-card">
+        <form id="form1" name="form1" method="post" action="/replycomplaint_post/{{ id }}">
+            {% csrf_token %}
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label for="textarea">Resolution Message</label>
+                <textarea name="textarea" id="textarea" class="form-control" placeholder="Write your reply to the customer here..." required></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <a href="/viewcomplaint" class="btn btn-secondary">Cancel</a>
+                <button type="submit" name="button" id="button" class="btn btn-primary">
+                    📤 Send Reply
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
