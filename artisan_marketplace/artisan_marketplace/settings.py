@@ -123,3 +123,6 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Use cookie-based sessions to avoid writing session data to the read-only database
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
