@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "artisan_marketplace/artisan_marketplace/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "artisan_marketplace/artisan_marketplace/wsgi.py"
+    }
+  ]
+}

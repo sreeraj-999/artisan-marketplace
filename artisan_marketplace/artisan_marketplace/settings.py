@@ -25,7 +25,7 @@ SECRET_KEY = '^my$@(xipr$#0z1j7sfp=xhu99#al-xgshe&4u!@rd)l+4^-43'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
