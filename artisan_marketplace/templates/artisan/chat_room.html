@@ -8,7 +8,7 @@
         display: flex;
         flex-direction: column;
         height: 60vh;
-        background: rgba(22, 18, 36, 0.4);
+        background: rgba(255, 255, 255, 0.5);
         border: 1px solid var(--border-color);
         border-radius: 16px;
         overflow: hidden;
@@ -16,7 +16,7 @@
     }
     
     .chat-header {
-        background: rgba(22, 18, 36, 0.8);
+        background: rgba(241, 245, 249, 0.95);
         padding: 1rem 1.5rem;
         border-bottom: 1px solid var(--border-color);
         display: flex;
@@ -38,7 +38,7 @@
     }
     
     .chat-messages::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.08);
         border-radius: 4px;
     }
     
@@ -57,7 +57,7 @@
        we will make it clean and readable. */
     .message-received {
         align-self: flex-start;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(0, 0, 0, 0.03);
         color: var(--text-color);
         border-bottom-left-radius: 4px;
         border: 1px solid var(--border-color);
@@ -83,7 +83,7 @@
     }
     
     .chat-input-area {
-        background: rgba(22, 18, 36, 0.8);
+        background: rgba(241, 245, 249, 0.95);
         padding: 1rem 1.5rem;
         border-top: 1px solid var(--border-color);
     }
@@ -107,7 +107,7 @@
     
     <div class="chat-container">
         <div class="chat-header">
-            <span style="font-weight: 600; color: #fff;">💬 Chat Session</span>
+            <span style="font-weight: 600; color: #0f172a;">💬 Chat Session</span>
             <span class="badge badge-success">Online</span>
         </div>
         
@@ -145,7 +145,7 @@
                         </div>
                     {% else %}
                         <div class="message-bubble message-received">
-                            <div style="font-size: 0.8rem; font-weight: 600; color: #c084fc; margin-bottom: 0.2rem;">{{ customer.name }}</div>
+                            <div style="font-size: 0.8rem; font-weight: 600; color: #4f46e5; margin-bottom: 0.2rem;">{{ customer.name }}</div>
                             <div>{{ c.chat }}</div>
                             <div class="message-meta">{{ c.chatdate }}</div>
                         </div>
