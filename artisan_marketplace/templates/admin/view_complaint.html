@@ -7,56 +7,51 @@
     <h1 class="page-title">Complaints</h1>
     <p class="page-subtitle">Track and reply to complaints submitted by customers.</p>
     
-    <div class="content-card">
+    <div class="content-card" style="background: transparent; border: none; box-shadow: none; padding: 0; margin-top: 1.5rem;">
         {% if data %}
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 60px; text-align: center;">#</th>
-                            <th>Customer</th>
-                            <th>Complaint Details</th>
-                            <th style="width: 130px;">Date Submitted</th>
-                            <th>Reply Status</th>
-                            <th style="width: 150px; text-align: center;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for i in data %}
-                            <tr>
-                                <td style="text-align: center; font-weight: 600; color: var(--text-muted);">{{ forloop.counter }}</td>
-                                <td style="font-weight: 600;">{{ i.CUSTOMER.name }}</td>
-                                <td>
-                                    <div style="font-weight: 500; font-size: 0.95rem;">{{ i.complaint }}</div>
-                                    {% if i.reply != 'pending' and i.reply != '' %}
-                                        <div style="margin-top: 0.6rem; padding: 0.6rem; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border-left: 3px solid #7c3aed; font-size: 0.88rem;">
-                                            <span style="color: #c084fc; font-weight: 600;">Reply:</span> {{ i.reply }}
-                                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Date: {{ i.replydate }}</div>
-                                        </div>
-                                    {% endif %}
-                                </td>
-                                <td style="font-size: 0.9rem; color: var(--text-muted);">{{ i.complaintdate }}</td>
-                                <td>
-                                    {% if i.reply == 'pending' or i.reply == '' %}
-                                        <span class="badge badge-warning">Pending</span>
-                                    {% else %}
-                                        <span class="badge badge-success">Resolved</span>
-                                    {% endif %}
-                                </td>
-                                <td style="text-align: center;">
-                                    {% if i.reply == 'pending' or i.reply == '' %}
-                                        <a href="/replycomplaint/{{ i.id }}" class="btn btn-primary btn-sm">💬 Send Reply</a>
-                                    {% else %}
-                                        <span style="font-size: 0.9rem; color: var(--text-muted);">No Action</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+                {% for i in data %}
+                    <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.3s ease; box-shadow: var(--shadow);">
+                        <div>
+                            <!-- Card Header -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color);">
+                                <div>
+                                    <span style="font-weight: 700; color: #0f172a; display: block; font-size: 1rem;">👤 {{ i.CUSTOMER.name }}</span>
+                                    <span style="font-size: 0.8rem; color: var(--text-muted);">Filed: {{ i.complaintdate }}</span>
+                                </div>
+                                {% if i.reply == 'pending' or i.reply == '' %}
+                                    <span class="badge badge-warning">Pending</span>
+                                {% else %}
+                                    <span class="badge badge-success">Resolved</span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Complaint Details -->
+                            <div style="font-size: 0.95rem; color: #0f172a; line-height: 1.5; white-space: pre-wrap; margin-bottom: 1.5rem;">
+                                {{ i.complaint }}
+                            </div>
+                        </div>
+                        
+                        <!-- Reply Action or Content Footer -->
+                        <div>
+                            {% if i.reply != 'pending' and i.reply != '' %}
+                                <div style="background: rgba(15, 23, 42, 0.03); border: 1px solid var(--border-color); border-left: 3px solid #0f172a; border-radius: 10px; padding: 0.75rem; font-size: 0.9rem;">
+                                    <div style="font-weight: 600; color: #475569; margin-bottom: 0.25rem;">Reply ({{ i.replydate }}):</div>
+                                    <div style="color: #0f172a; white-space: pre-wrap; line-height: 1.4;">{{ i.reply }}</div>
+                                </div>
+                            {% else %}
+                                <div style="display: flex; justify-content: flex-end;">
+                                    <a href="/replycomplaint/{{ i.id }}" class="btn btn-primary btn-sm" style="border-radius: 8px; padding: 0.5rem 1rem;">
+                                        💬 Send Reply
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         {% else %}
-            <div style="text-align: center; padding: 3rem 1.5rem; color: var(--text-muted);">
+            <div class="content-card" style="text-align: center; padding: 3rem 1.5rem; color: var(--text-muted);">
                 <h3>No complaints registered</h3>
                 <p style="margin-top: 0.5rem;">There are currently no customer complaints in the database.</p>
             </div>

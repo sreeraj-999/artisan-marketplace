@@ -7,61 +7,60 @@
     <h1 class="page-title">Shopping Cart</h1>
     <p class="page-subtitle">Review your selected items and proceed to checkout.</p>
     
-    <div class="content-card">
+    <div class="content-card" style="background: transparent; border: none; box-shadow: none; padding: 0; margin-top: 1.5rem;">
         {% if data %}
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 80px; text-align: center;">#</th>
-                            <th>Product Name</th>
-                            <th>Artisan</th>
-                            <th>Price</th>
-                            <th style="width: 150px; text-align: center;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for i in data %}
-                            <tr>
-                                <td style="text-align: center; font-weight: 600; color: var(--text-muted);">{{ forloop.counter }}</td>
-                                <td>
-                                    <div style="font-weight: 600; display: flex; align-items: center; gap: 0.75rem;">
-                                        <div style="width: 50px; height: 50px; border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.05); border: 1px solid var(--border-color);">
-                                            {% if i.PRODUCT.image and i.PRODUCT.image != 'no_image.png' %}
-                                                <img src="/media/{{ i.PRODUCT.image }}" alt="{{ i.PRODUCT.productname }}" style="width: 100%; height: 100%; object-fit: cover;" />
-                                            {% else %}
-                                                <div style="display: flex; justify-content: center; align-items: center; height: 100%; font-size: 1.25rem;">🏺</div>
-                                            {% endif %}
-                                        </div>
-                                        <span>{{ i.PRODUCT.productname }}</span>
-                                    </div>
-                                </td>
-                                <td>👷 {{ i.PRODUCT.ARTISAN.name }}</td>
-                                <td style="font-weight: 700; color: #6366f1;">${{ i.PRODUCT.price }}</td>
-                                <td style="text-align: center;">
-                                    <a href="/customer_remove_cart/{{ i.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Remove this item from your cart?')">🗑️ Remove</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                {% for i in data %}
+                    <div style="display: flex; align-items: center; background: #ffffff; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; gap: 1.5rem; transition: all 0.3s ease; box-shadow: var(--shadow);">
+                        <!-- Product Image -->
+                        <div style="width: 80px; height: 80px; border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.02); border: 1px solid var(--border-color); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                            {% if i.PRODUCT.image and i.PRODUCT.image != 'no_image.png' %}
+                                <img src="/media/{{ i.PRODUCT.image }}" alt="{{ i.PRODUCT.productname }}" style="width: 100%; height: 100%; object-fit: cover;" />
+                            {% else %}
+                                <div style="font-size: 1.75rem;">🏺</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Details -->
+                        <div style="flex-grow: 1;">
+                            <h3 style="font-size: 1.15rem; color: #0f172a; margin-bottom: 0.35rem; font-weight: 600;">{{ i.PRODUCT.productname }}</h3>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.35rem;">
+                                <span>👷 Artisan:</span>
+                                <strong style="color: #0f172a;">{{ i.PRODUCT.ARTISAN.name }}</strong>
+                            </p>
+                        </div>
+                        
+                        <!-- Price -->
+                        <div style="text-align: right; min-width: 100px;">
+                            <span style="font-size: 1.3rem; font-weight: 700; color: #0f172a;">₹{{ i.PRODUCT.price }}</span>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div style="flex-shrink: 0;">
+                            <a href="/customer_remove_cart/{{ i.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Remove this item from your cart?')" style="padding: 0.6rem 1rem; border-radius: 10px;">
+                                🗑️ Remove
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
             
-            <div style="margin-top: 2rem; display: flex; flex-direction: column; align-items: flex-end; gap: 1rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
-                <div style="font-size: 1.25rem; font-weight: 600;">
-                    Total Cart Price: <span style="color: #6366f1; font-weight: 700; font-size: 1.6rem; margin-left: 0.5rem;">${{ total_price }}</span>
+            <!-- Summary Card -->
+            <div class="content-card" style="margin-top: 1.5rem; display: flex; flex-direction: column; align-items: flex-end; gap: 1.25rem; padding: 2rem;">
+                <div style="font-size: 1.2rem; font-weight: 500; color: var(--text-muted);">
+                    Total Cart Price: <span style="color: #0f172a; font-weight: 700; font-size: 1.8rem; margin-left: 0.5rem;">₹{{ total_price }}</span>
                 </div>
                 
-                <div style="display: flex; gap: 1rem;">
-                    <a href="/customer_viewproducts" class="btn btn-secondary">🛒 Continue Shopping</a>
-                    <a href="/customer_checkout" class="btn btn-primary">💳 Proceed to Checkout</a>
+                <div style="display: flex; gap: 1rem; width: 100%; justify-content: flex-end;">
+                    <a href="/customer_viewproducts" class="btn btn-secondary" style="border-radius: 12px;">🛒 Continue Shopping</a>
+                    <a href="/customer_checkout" class="btn btn-primary" style="border-radius: 12px;">💳 Proceed to Checkout</a>
                 </div>
             </div>
         {% else %}
-            <div style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
+            <div class="content-card" style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
                 <div style="font-size: 3rem; margin-bottom: 1rem;">🛒</div>
-                <h2>Your shopping cart is empty</h2>
-                <p style="margin-top: 0.5rem; margin-bottom: 2rem;">Explore the catalog and add products you like to the cart.</p>
+                <h2 style="color: #0f172a; margin-bottom: 0.5rem;">Your shopping cart is empty</h2>
+                <p style="margin-bottom: 2rem;">Explore the catalog and add products you like to your cart.</p>
                 <a href="/customer_viewproducts" class="btn btn-primary">Browse Handcrafts</a>
             </div>
         {% endif %}
