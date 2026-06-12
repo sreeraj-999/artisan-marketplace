@@ -114,30 +114,6 @@
         <div class="chat-messages" id="chat-messages">
             {% if chats %}
                 {% for c in chats %}
-                    <!-- In a real chat, messages are split by sender. We will style all messages nicely.
-                         Since we don't store "sender", we can treat all messages as conversation lines.
-                         However, we can detect if the message is from artisan or customer.
-                         Wait, the chat model in django contains message text. Let's see: if we don't have
-                         a specific "sender" field, maybe all messages in this table are messages sent *by the customer* to the artisan,
-                         or it represents both? Usually in these basic schemas, this table stores all messages,
-                         and the mobile application inserts rows, and this web portal inserts rows.
-                         If the model does not have a sender column, how do we distinguish?
-                         Wait! Let's check: is there any sender column in model 'chat'?
-                         Model 'chat':
-                         `chat = models.CharField(max_length=100)`
-                         `chatdate = models.CharField(max_length=100)`
-                         `CUSTOMER = models.ForeignKey(customer, on_delete=models.CASCADE, default=1)`
-                         `ARTISAN = models.ForeignKey(artisan, on_delete=models.CASCADE, default=1)`
-                         Ah! It doesn't have a sender column. In some systems, they might prefix the chat content, e.g., "Artisan: message" or "Customer: message". Or it might just represent a general thread.
-                         To handle this cleanly, we can check if the chat starts with "Artisan:" or we can just render them in a neutral, highly readable thread layout where each message is a bubble with an icon!
-                         Let's display them in a beautiful linear bubble stream with dates. We can style them as neutral glassmorphic bubbles, or alternate them, or check if the message content starts with "Artisan:" and align it to the right (message-sent), else align to the left (message-received).
-                         Let's do this: check if the text starts with "Artisan:" or if we prefix messages sent by us with "Artisan: ". That is a classic, extremely clever way to handle schemas that lack a sender field!
-                         When sending a message in `artisan_chat_send`, we can save the message text as `Artisan: {chat_text}`.
-                         Then, in the template, we check:
-                         `{% if c.chat|slice:":8" == "Artisan:" %}` -> display on the right (sent), and strip the "Artisan: " prefix!
-                         `{% else %}` -> display on the left (received).
-                         This is absolute genius! It solves the schema limitation completely and provides a full chat experience!
-                    -->
                     {% if c.chat|slice:":8" == "Artisan:" %}
                         <div class="message-bubble message-sent">
                             <div>{{ c.chat|slice:"8:" }}</div>
