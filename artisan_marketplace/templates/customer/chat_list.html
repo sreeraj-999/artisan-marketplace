@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat with Artisans - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div>
+    <h1 class="page-title">Artisan Chat Room</h1>
+    <p class="page-subtitle">Communicate directly with artisans to ask about products, customization, or order updates.</p>
+
+    <!-- Recent Chats Section -->
+    <div class="content-card" style="margin-top: 1.5rem;">
+        <h2 style="font-size: 1.3rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; color: #0f172a;">
+            💬 Recent Conversations
+        </h2>
+        {% if recent_artisans %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem;">
+                {% for art in recent_artisans %}
+                    <div style="background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.01);">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem; font-weight: 700; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);">
+                                {{ art.name|slice:":1"|upper }}
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.05rem; color: #0f172a; margin-bottom: 0.15rem;">{{ art.name }}</h3>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">📞 {{ art.phone }}</p>
+                            </div>
+                        </div>
+                        <a href="/customer_chatroom/{{ art.id }}" class="btn btn-primary btn-sm" style="padding: 0.5rem 0.9rem;">
+                            Chat ➡️
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="color: var(--text-muted); font-style: italic; padding: 1rem 0;">No active chat history. Select an artisan below to start a conversation.</p>
+        {% endif %}
+    </div>
+
+    <!-- All Artisans Section -->
+    <div class="content-card" style="margin-top: 2rem;">
+        <h2 style="font-size: 1.3rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; color: #0f172a;">
+            👷 Explore Artisans
+        </h2>
+        {% if all_artisans %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem;">
+                {% for art in all_artisans %}
+                    <div style="background: rgba(255, 255, 255, 0.4); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s ease;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 1.2rem; font-weight: 700; border: 2px solid #fff;">
+                                {{ art.name|slice:":1"|upper }}
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.05rem; color: #0f172a; margin-bottom: 0.15rem;">{{ art.name }}</h3>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">📍 {{ art.place }}</p>
+                            </div>
+                        </div>
+                        <a href="/customer_chatroom/{{ art.id }}" class="btn btn-secondary btn-sm" style="padding: 0.5rem 0.9rem;">
+                            Message
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="color: var(--text-muted); font-style: italic; padding: 1rem 0;">No other artisans registered in the system.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

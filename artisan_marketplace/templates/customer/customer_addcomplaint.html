@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Submit a Complaint - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto; width: 100%;">
+    <h1 class="page-title">Submit a Complaint</h1>
+    <p class="page-subtitle">We are here to help. Let us know if you faced any issues.</p>
+
+    <div class="content-card" style="margin-top: 1.5rem;">
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.4rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">📋 Issue Details</h2>
+        
+        <form action="/customer_addcomplaint_post" method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="complaint">Describe your complaint or issue</label>
+                <textarea id="complaint" name="complaint" class="form-control" placeholder="Please provide details about the order, product, or service issue you encountered..." required></textarea>
+                <small style="color: var(--text-muted); margin-top: 0.25rem;">Our support team will review and reply to your complaint as soon as possible.</small>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary">
+                    ⚠️ Submit Complaint
+                </button>
+                <a href="/customer_viewcomplaints" class="btn btn-secondary">
+                    View My Complaints
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

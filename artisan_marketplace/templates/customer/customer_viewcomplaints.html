@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}My Complaints - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+        <div>
+            <h1 class="page-title">Complaints log</h1>
+            <p class="page-subtitle">Track your submitted complaints and support team replies.</p>
+        </div>
+        <a href="/customer_addcomplaint" class="btn btn-primary">
+            ⚠️ Submit New Complaint
+        </a>
+    </div>
+
+    {% if data %}
+        <div class="table-responsive" style="margin-top: 1.5rem;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">Date</th>
+                        <th style="width: 40%;">Complaint Description</th>
+                        <th style="width: 15%;">Status</th>
+                        <th style="width: 30%;">Response / Reply</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comp in data %}
+                        <tr>
+                            <td>
+                                <span style="font-weight: 500; color: var(--text-color);">{{ comp.complaintdate }}</span>
+                            </td>
+                            <td>
+                                <div style="white-space: pre-wrap; font-size: 0.95rem; color: #0f172a;">{{ comp.complaint }}</div>
+                            </td>
+                            <td>
+                                {% if comp.reply == 'pending' %}
+                                    <span class="badge badge-warning">Pending</span>
+                                {% else %}
+                                    <span class="badge badge-success">Replied</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if comp.reply == 'pending' %}
+                                    <span style="font-style: italic; color: var(--text-muted);">Waiting for review</span>
+                                {% else %}
+                                    <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.15); border-radius: 8px; padding: 0.75rem; font-size: 0.9rem;">
+                                        <div style="font-weight: 600; color: #10b981; margin-bottom: 0.25rem;">Reply ({{ comp.replydate }}):</div>
+                                        <div style="color: #0f172a; white-space: pre-wrap;">{{ comp.reply }}</div>
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="content-card" style="text-align: center; padding: 4rem 2rem; margin-top: 1.5rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+            <h2 style="font-size: 1.4rem; margin-bottom: 0.5rem; color: #0f172a;">No complaints filed!</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Everything looks perfect! You haven't submitted any complaints yet.</p>
+            <a href="/customer_addcomplaint" class="btn btn-primary">File a Complaint</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

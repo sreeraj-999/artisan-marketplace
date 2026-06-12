@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}My Orders - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div>
+    <h1 class="page-title">My Orders</h1>
+    <p class="page-subtitle">Track the status of your purchased items and view order history.</p>
+    
+    <div class="content-card">
+        {% if data %}
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 60px; text-align: center;">#</th>
+                            <th>Product Details</th>
+                            <th>Artisan</th>
+                            <th>Amount Paid</th>
+                            <th>Order Date</th>
+                            <th style="width: 150px; text-align: center;">Delivery Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in data %}
+                            <tr>
+                                <td style="text-align: center; font-weight: 600; color: var(--text-muted);">{{ forloop.counter }}</td>
+                                <td>
+                                    <div style="font-weight: 600; color: #6366f1; display: flex; align-items: center; gap: 0.75rem;">
+                                        <div style="width: 45px; height: 45px; border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.05); border: 1px solid var(--border-color);">
+                                            {% if i.PRODUCT.image and i.PRODUCT.image != 'no_image.png' %}
+                                                <img src="/media/{{ i.PRODUCT.image }}" alt="{{ i.PRODUCT.productname }}" style="width: 100%; height: 100%; object-fit: cover;" />
+                                            {% else %}
+                                                <div style="display: flex; justify-content: center; align-items: center; height: 100%; font-size: 1.1rem;">🏺</div>
+                                            {% endif %}
+                                        </div>
+                                        <span>{{ i.PRODUCT.productname }}</span>
+                                    </div>
+                                </td>
+                                <td>👷 {{ i.PRODUCT.ARTISAN.name }}</td>
+                                <td style="font-weight: 700;">${{ i.price }}</td>
+                                <td style="font-size: 0.9rem; color: var(--text-muted);">{{ i.date }}</td>
+                                <td style="text-align: center;">
+                                    {% if i.status|lower == 'pending' %}
+                                        <span class="badge badge-warning">Pending</span>
+                                    {% elif i.status|lower == 'shipped' %}
+                                        <span class="badge badge-info">Shipped</span>
+                                    {% elif i.status|lower == 'delivered' or i.status|lower == 'completed' %}
+                                        <span class="badge badge-success">Delivered</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">{{ i.status }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
+                <h3>No orders placed yet</h3>
+                <p style="margin-top: 0.5rem; margin-bottom: 2rem;">Purchased handcrafted items will be displayed here.</p>
+                <a href="/customer_viewproducts" class="btn btn-primary">Start Shopping</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

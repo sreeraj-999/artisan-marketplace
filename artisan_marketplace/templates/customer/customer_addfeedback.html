@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Product Feedback - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div>
+    <h1 class="page-title">Product Feedback</h1>
+    <p class="page-subtitle">Share your experience and rate your purchase to help others.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem; align-items: start; margin-top: 1.5rem;">
+        <!-- Product Card Preview -->
+        <div class="content-card" style="margin-top: 0; padding: 1.5rem;">
+            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Item Preview</h3>
+            {% if product.image %}
+                <img src="/media/{{ product.image }}" alt="{{ product.productname }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+            {% else %}
+                <div style="width: 100%; height: 200px; background: rgba(0, 0, 0, 0.05); display: flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 1rem; color: var(--text-muted);">
+                    📦 No Image Available
+                </div>
+            {% endif %}
+            <h2 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: #0f172a;">{{ product.productname }}</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                <span style="font-size: 1.2rem; font-weight: 700; color: #4f46e5;">₹{{ product.price }}</span>
+                <span class="badge badge-info">Qty: {{ product.quantity }}</span>
+            </div>
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); font-size: 0.9rem; color: var(--text-muted);">
+                Artisan: <strong>{{ product.ARTISAN.name }}</strong>
+            </div>
+        </div>
+
+        <!-- Feedback Form Card -->
+        <div class="content-card" style="margin-top: 0;">
+            <h2 style="margin-bottom: 1.5rem; font-size: 1.4rem;">Submit Your Review</h2>
+            
+            <form action="/customer_addfeedback_post/{{ product.id }}" method="POST">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="feedback">Your Review / Feedback</label>
+                    <textarea id="feedback" name="feedback" class="form-control" placeholder="Tell us what you liked or how we can improve..." required></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary">
+                        ⭐ Submit Feedback
+                    </button>
+                    <a href="/customer_viewproducts" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -482,9 +482,18 @@
                 <li class="{% if request.path == '/artisan_viewreviews' %}active{% endif %}"><a href="/artisan_viewreviews">⭐ <span>Product Reviews</span></a></li>
                 <li class="{% if request.path == '/artisan_chat' or '/artisan_chatroom' in request.path %}active{% endif %}"><a href="/artisan_chat">💬 <span>Customer Chat</span></a></li>
                 <li><a href="/logout" class="logout-link">🚪 <span>Logout</span></a></li>
+            {% elif request.session.usertype == 'customer' %}
+                <li class="{% if request.path == '/customer_home' %}active{% endif %}"><a href="/customer_home">🏠 <span>Dashboard</span></a></li>
+                <li class="{% if request.path == '/customer_viewproducts' %}active{% endif %}"><a href="/customer_viewproducts">🛍️ <span>Browse Products</span></a></li>
+                <li class="{% if request.path == '/customer_viewcart' %}active{% endif %}"><a href="/customer_viewcart">🛒 <span>Shopping Cart</span></a></li>
+                <li class="{% if request.path == '/customer_vieworders' %}active{% endif %}"><a href="/customer_vieworders">📦 <span>My Orders</span></a></li>
+                <li class="{% if request.path == '/customer_addcomplaint' or request.path == '/customer_viewcomplaints' %}active{% endif %}"><a href="/customer_viewcomplaints">⚠️ <span>Complaints</span></a></li>
+                <li class="{% if request.path == '/customer_chat' or '/customer_chatroom' in request.path %}active{% endif %}"><a href="/customer_chat">💬 <span>Chat with Artisans</span></a></li>
+                <li><a href="/logout" class="logout-link">🚪 <span>Logout</span></a></li>
             {% else %}
                 <li class="{% if request.path == '/log' or request.path == '' %}active{% endif %}"><a href="/log">🔑 <span>Login</span></a></li>
-                <li class="{% if request.path == '/artisan_signup' %}active{% endif %}"><a href="/artisan_signup">📝 <span>Register as Artisan</span></a></li>
+                <li class="{% if request.path == '/artisan_signup' %}active{% endif %}"><a href="/artisan_signup">👷 <span>Register as Artisan</span></a></li>
+                <li class="{% if request.path == '/customer_signup' %}active{% endif %}"><a href="/customer_signup">👥 <span>Register as Customer</span></a></li>
             {% endif %}
         </ul>
     </div>

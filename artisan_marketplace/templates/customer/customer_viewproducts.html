@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}Browse Products - Artisan Marketplace{% endblock %}
+
+{% block extra_head %}
+<style>
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 1rem;
+    }
+    
+    .product-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: var(--shadow);
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(99, 102, 241, 0.3);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+    }
+    
+    .product-img-wrapper {
+        position: relative;
+        height: 220px;
+        background: rgba(0, 0, 0, 0.02);
+        overflow: hidden;
+    }
+    
+    .product-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .product-card:hover .product-img {
+        transform: scale(1.05);
+    }
+    
+    .product-info {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex-grow: 1;
+    }
+    
+    .product-name {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+    
+    .artisan-badge {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .product-price-qty {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.5rem;
+    }
+    
+    .product-price {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #6366f1;
+    }
+    
+    .product-qty {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        background: rgba(0, 0, 0, 0.03);
+        padding: 0.25rem 0.5rem;
+        border-radius: 8px;
+    }
+    
+    .product-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+        border-top: 1px solid var(--border-color);
+        background: rgba(0, 0, 0, 0.01);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+    <h1 class="page-title">Handcrafted Products</h1>
+    <p class="page-subtitle">Discover and purchase unique items made directly by local artisans.</p>
+    
+    <!-- Filter Section -->
+    <div class="content-card" style="margin-top: 1rem; padding: 1.5rem 2rem;">
+        <form method="get" action="/customer_viewproducts" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">
+            <div style="display: flex; gap: 1rem; align-items: center; flex-grow: 1;">
+                <label for="category" style="font-weight: 600; font-size: 0.95rem; color: var(--text-muted); min-width: 130px;">🏷️ Filter by Category:</label>
+                <select name="category" id="category" class="form-control" style="max-width: 250px; margin-bottom: 0;" onchange="this.form.submit()">
+                    <option value="">All Products</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.category }}" {% if selected_category == cat.category %}selected{% endif %}>{{ cat.category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            {% if selected_category %}
+                <a href="/customer_viewproducts" class="btn btn-secondary btn-sm">Clear Filter</a>
+            {% endif %}
+        </form>
+    </div>
+    
+    {% if data %}
+        <div class="product-grid">
+            {% for i in data %}
+                <div class="product-card">
+                    <div class="product-img-wrapper">
+                        {% if i.image and i.image != 'no_image.png' %}
+                            <img src="/media/{{ i.image }}" alt="{{ i.productname }}" class="product-img" />
+                        {% else %}
+                            <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: var(--text-muted); font-size: 3rem;">🏺</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="product-info">
+                        <div class="artisan-badge">
+                            👷 By: <strong>{{ i.ARTISAN.name }}</strong>
+                            <a href="/customer_follow_artisan/{{ i.ARTISAN.id }}" style="text-decoration: none; margin-left: 0.5rem; font-size: 0.8rem; font-weight: 600; color: #6366f1;">
+                                {% if i.ARTISAN.id in followed_art_ids %}
+                                    ❤️ Following
+                                {% else %}
+                                    🤍 Follow
+                                {% endif %}
+                            </a>
+                        </div>
+                        <h3 class="product-name">{{ i.productname }}</h3>
+                        <div class="product-price-qty">
+                            <span class="product-price">${{ i.price }}</span>
+                            <span class="product-qty">Stock: {{ i.quantity }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <a href="/customer_addto_cart/{{ i.id }}" class="btn btn-primary" style="width: 100%;">🛒 Add to Cart</a>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <a href="/customer_addfeedback/{{ i.id }}" class="btn btn-secondary btn-sm" style="font-size: 0.82rem;">⭐ Review</a>
+                            <a href="/customer_chatroom/{{ i.ARTISAN.id }}" class="btn btn-secondary btn-sm" style="font-size: 0.82rem;">💬 Chat</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="content-card" style="text-align: center; padding: 4rem 2rem; color: var(--text-muted);">
+            <h2>No products found</h2>
+            {% if selected_category %}
+                <p style="margin-top: 0.5rem; margin-bottom: 2rem;">No products match the category filter "{{ selected_category }}".</p>
+                <a href="/customer_viewproducts" class="btn btn-primary">Clear Category Filter</a>
+            {% else %}
+                <p style="margin-top: 0.5rem;">There are currently no products listed in the marketplace.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

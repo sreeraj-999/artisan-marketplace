@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Register as Customer - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto; width: 100%;">
+    <h1 class="page-title" style="text-align: center;">Customer Registration</h1>
+    <p class="page-subtitle" style="text-align: center; margin-bottom: 2rem;">Sign up to purchase unique handcrafted artisan products and connect with creators.</p>
+    
+    <div class="content-card" style="margin-top: 0;">
+        <form id="form1" name="form1" method="post" action="/customer_signup_post">
+            {% csrf_token %}
+            
+            <h3 style="margin-bottom: 1rem; color: #6366f1; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.5px;">👤 Personal Information</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Enter your name" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" name="phone" id="phone" class="form-control" placeholder="Enter your phone number" required />
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="name@example.com" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="place">Place / Location</label>
+                    <input type="text" name="place" id="place" class="form-control" placeholder="e.g. Los Angeles, USA" required />
+                </div>
+            </div>
+            
+            <h3 style="margin-bottom: 1rem; color: #6366f1; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.5px; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">🔑 Account Credentials</h3>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Choose a unique username" required />
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Create password" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Verify password" required />
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; align-items: center; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                <span style="font-size: 0.95rem; color: var(--text-muted);">Already have an account? <a href="/log" style="color: #6366f1; text-decoration: none; font-weight: 600;">Log In</a></span>
+                <button type="submit" class="btn btn-primary">
+                    📝 Register Account
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

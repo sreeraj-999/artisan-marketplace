@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Dashboard - Artisan Marketplace{% endblock %}
+
+{% block content %}
+<div>
+    <h1 class="page-title">Welcome back, {{ customer.name }}!</h1>
+    <p class="page-subtitle">Browse unique handcrafted products, manage your cart, and track orders.</p>
+    
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-title">🛒 Items in Cart</span>
+            <span class="stat-value">{{ cart_count }}</span>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid #6366f1;">
+            <span class="stat-title">📦 Total Orders Placed</span>
+            <span class="stat-value">{{ order_count }}</span>
+        </div>
+    </div>
+    
+    <!-- Quick Actions Panel -->
+    <div class="content-card" style="margin-top: 2rem;">
+        <h2 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; font-size: 1.4rem;">🛍️ Shopping Actions</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <a href="/customer_viewproducts" class="btn btn-primary">🛍️ Browse Product Catalog</a>
+            <a href="/customer_viewcart" class="btn btn-secondary">🛒 View Shopping Cart</a>
+            <a href="/customer_vieworders" class="btn btn-secondary">📦 My Order History</a>
+            <a href="/customer_addcomplaint" class="btn btn-secondary">⚠️ Submit a Complaint</a>
+            <a href="/customer_chat" class="btn btn-secondary">💬 Chat with Artisans</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
