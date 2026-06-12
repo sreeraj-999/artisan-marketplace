@@ -75,10 +75,24 @@ WSGI_APPLICATION = 'artisan_marketplace.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+DB_PATH = os.path.join(BASE_DIR, 'db.sqlite3')
+
+# On Vercel (or any read-only filesystem), copy the SQLite DB to /tmp to make it writable
+if os.environ.get('VERCEL') == '1' or not os.access(BASE_DIR, os.W_OK):
+    import shutil
+    tmp_db_path = '/tmp/db.sqlite3'
+    if not os.path.exists(tmp_db_path):
+        try:
+            shutil.copy2(DB_PATH, tmp_db_path)
+            os.chmod(tmp_db_path, 0o666)
+        except Exception as e:
+            pass
+    DB_PATH = tmp_db_path
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': DB_PATH,
     }
 }
 
